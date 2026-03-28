@@ -1,0 +1,25 @@
+{
+  "name": "@arraypress/page-templates",
+  "version": "1.0.0",
+  "description": "Server-rendered HTML page templates and components for transactional pages — order success, downloads, customer portal, login. Light and dark themes.",
+  "type": "module",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "types": "./src/index.d.ts"
+    }
+  },
+  "files": ["src"],
+  "scripts": {
+    "test": "node --test tests/page-templates.test.js"
+  },
+  "keywords": ["html", "templates", "pages", "server-rendered", "transactional", "download", "portal", "dark-mode", "light-mode"],
+  "author": "David Sherlock",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arraypress/page-templates.git"
+  }
+}

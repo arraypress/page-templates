@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" class="auto">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Custom Page — ArrayPress</title>
+
+<style>:root{--brand:#6366f1}
+/* ── Reset ──────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ── Light Theme (default) ──────────────── */
+:root{
+  --bg:#f8f9fa;
+  --bg-page:#ffffff;
+  --bg-card:#ffffff;
+  --bg-input:#f1f3f5;
+  --bg-code:#f1f3f5;
+  --bg-hover:rgba(0,0,0,0.02);
+  --text:#18181b;
+  --text-secondary:#3f3f46;
+  --text-muted:#71717a;
+  --text-faint:#a1a1aa;
+  --border:rgba(0,0,0,0.08);
+  --border-light:rgba(0,0,0,0.04);
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --radius:12px;
+  --radius-sm:8px;
+  --radius-xs:6px;
+}
+
+/* ── Dark Theme ─────────────────────────── */
+.dark{
+  --bg:#121212;
+  --bg-page:#121212;
+  --bg-card:#1a1a1e;
+  --bg-input:#222226;
+  --bg-code:#222226;
+  --bg-hover:rgba(255,255,255,0.04);
+  --text:#f0f0f0;
+  --text-secondary:#c8c8cc;
+  --text-muted:#8a8a8f;
+  --text-faint:#5a5a60;
+  --border:rgba(255,255,255,0.08);
+  --border-light:rgba(255,255,255,0.04);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* ── Auto Theme (follows OS) ────────────── */
+@media(prefers-color-scheme:dark){
+  .auto{
+    --bg:#121212;
+    --bg-page:#121212;
+    --bg-card:#1a1a1e;
+    --bg-input:#222226;
+    --bg-code:#222226;
+    --bg-hover:rgba(255,255,255,0.04);
+    --text:#f0f0f0;
+    --text-secondary:#c8c8cc;
+    --text-muted:#8a8a8f;
+    --text-faint:#5a5a60;
+    --border:rgba(255,255,255,0.08);
+    --border-light:rgba(255,255,255,0.04);
+    --shadow:0 1px 3px rgba(0,0,0,0.4);
+  }
+}
+
+/* ── Animations ─────────────────────────── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Base ───────────────────────────────── */
+html,body{min-height:100%;margin:0}
+html{background:#f8f9fa}
+html.dark{background:#121212}
+@media(prefers-color-scheme:dark){html.auto{background:#121212}}
+@media(prefers-color-scheme:light){html.auto{background:#f8f9fa}}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  min-height:100vh;padding:24px;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── Layout ─────────────────────────────── */
+.container{max-width:540px;width:100%;animation:fadeIn 0.3s ease}
+
+/* ── Header ─────────────────────────────── */
+.page-header{text-align:center;margin-bottom:32px}
+.page-header h1{font-size:22px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.page-header .subtitle{font-size:14px;color:var(--text-muted);line-height:1.5}
+
+/* ── Icon Circle ────────────────────────── */
+.icon-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.icon-circle svg{width:28px;height:28px}
+
+/* ── Cards ──────────────────────────────── */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:12px;box-shadow:var(--shadow)}
+
+/* ── Buttons ────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 20px;background:var(--brand);color:#000;
+  border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;
+  cursor:pointer;transition:opacity 0.15s;text-decoration:none;font-family:inherit;
+}
+.btn:hover{opacity:0.85;text-decoration:none}
+.btn:disabled,.btn-disabled{opacity:0.35;cursor:not-allowed;pointer-events:none}
+.btn-outline{background:transparent;color:var(--brand);border:1px solid var(--border)}
+.btn-outline:hover{background:var(--bg-hover)}
+.btn-sm{padding:6px 14px;font-size:12px;border-radius:var(--radius-xs)}
+.btn-danger{background:rgba(239,68,68,0.1);color:#ef4444}
+
+/* ── Inputs ─────────────────────────────── */
+.input{
+  width:100%;padding:12px 16px;background:var(--bg-input);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  color:var(--text);font-size:14px;outline:none;transition:border-color 0.15s;font-family:inherit;
+}
+.input:focus{border-color:color-mix(in srgb,var(--brand) 40%,transparent)}
+.input::placeholder{color:var(--text-faint)}
+
+/* ── File Rows ──────────────────────────── */
+.file-row{
+  display:flex;align-items:center;gap:16px;padding:16px;
+  background:var(--bg-input);border:1px solid var(--border);
+  border-radius:10px;margin-bottom:8px;transition:opacity 0.15s;
+}
+.file-row-exhausted{opacity:0.5}
+.file-icon{
+  flex-shrink:0;width:40px;height:40px;border-radius:var(--radius-sm);
+  background:color-mix(in srgb,var(--brand) 10%,transparent);
+  display:flex;align-items:center;justify-content:center;
+}
+.file-icon-exhausted{background:rgba(239,68,68,0.1)}
+.file-info{flex:1;min-width:0}
+.file-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-meta{font-size:12px;color:var(--text-muted);margin-top:2px}
+.download-count{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);margin-top:4px}
+.download-count-warn{color:#f59e0b}
+.download-count-exhausted{color:#ef4444}
+
+/* ── License Keys ───────────────────────── */
+.license-row{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:var(--bg-input);border:1px solid var(--border);
+  border-radius:10px;margin-bottom:8px;
+}
+.license-key{
+  font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace;
+  font-size:13px;font-weight:600;background:var(--bg-code);
+  padding:6px 12px;border-radius:var(--radius-xs);
+  border:1px solid var(--border);user-select:all;flex:1;color:var(--text);
+}
+.license-status{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px}
+.license-active{background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand)}
+.license-expired{background:rgba(239,68,68,0.1);color:#ef4444}
+
+/* ── Order Cards ────────────────────────── */
+.order-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow);
+}
+.order-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 20px;border-bottom:1px solid var(--border-light);
+}
+.order-amount{font-size:16px;font-weight:700;font-family:ui-monospace,monospace;color:var(--text)}
+.order-date{font-size:12px;color:var(--text-muted)}
+.order-body{padding:16px 20px}
+
+/* ── Key-Value ──────────────────────────── */
+.kv-list{margin:16px 0}
+.kv-row{
+  display:flex;justify-content:space-between;padding:10px 0;
+  border-bottom:1px solid var(--border-light);font-size:14px;
+}
+.kv-label{color:var(--text-muted)}
+.kv-value{color:var(--text);font-weight:500}
+
+/* ── Alerts ─────────────────────────────── */
+.alert{padding:14px 16px;border-radius:var(--radius-sm);margin:16px 0;font-size:14px;line-height:1.6}
+.alert-info{background:#eff6ff;border-left:4px solid #3b82f6;color:#1e40af}
+.alert-success{background:#f0fdf4;border-left:4px solid #10b981;color:#065f46}
+.alert-warning{background:#fffbeb;border-left:4px solid #f59e0b;color:#92400e}
+.alert-error{background:#fef2f2;border-left:4px solid #ef4444;color:#991b1b}
+.dark .alert-info{background:rgba(59,130,246,0.1);color:#93c5fd}
+.dark .alert-success{background:rgba(16,185,129,0.1);color:#6ee7b7}
+.dark .alert-warning{background:rgba(245,158,11,0.1);color:#fcd34d}
+.dark .alert-error{background:rgba(239,68,68,0.1);color:#fca5a5}
+.auto .alert-info{background:#eff6ff;color:#1e40af}
+.auto .alert-success{background:#f0fdf4;color:#065f46}
+.auto .alert-warning{background:#fffbeb;color:#92400e}
+.auto .alert-error{background:#fef2f2;color:#991b1b}
+@media(prefers-color-scheme:dark){
+  .auto .alert-info{background:rgba(59,130,246,0.1);color:#93c5fd}
+  .auto .alert-success{background:rgba(16,185,129,0.1);color:#6ee7b7}
+  .auto .alert-warning{background:rgba(245,158,11,0.1);color:#fcd34d}
+  .auto .alert-error{background:rgba(239,68,68,0.1);color:#fca5a5}
+}
+
+/* ── Tabs ───────────────────────────────── */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px}
+.tab{
+  padding:10px 20px;font-size:13px;font-weight:600;color:var(--text-muted);
+  cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;
+  background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;
+}
+.tab:hover{color:var(--text)}
+.tab-active{color:var(--brand);border-bottom-color:var(--brand)}
+.tab-panel{display:none}
+.tab-panel-active{display:block}
+
+/* ── Section Labels ─────────────────────── */
+.section-label{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--text-faint);margin-bottom:12px;
+}
+
+/* ── Note/Empty ─────────────────────────── */
+.note{
+  text-align:center;padding:24px 16px;background:var(--bg-input);
+  border:1px solid var(--border);border-radius:10px;
+  font-size:13px;color:var(--text-muted);
+}
+
+/* ── Spinner ────────────────────────────── */
+.spinner{
+  width:40px;height:40px;border:3px solid var(--border);
+  border-top-color:var(--brand);border-radius:50%;
+  margin:0 auto 16px;animation:spin 0.8s linear infinite;
+}
+
+/* ── Footer ─────────────────────────────── */
+.page-footer{text-align:center;margin-top:32px;font-size:12px;color:var(--text-faint)}
+
+/* ── Copy Button ────────────────────────── */
+.copy-btn{
+  padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;
+  background:var(--bg-hover);border:1px solid var(--border);border-radius:4px;
+  color:var(--text-muted);transition:all 0.15s;font-family:inherit;
+}
+.copy-btn:hover{color:var(--text);background:var(--bg-input)}
+
+/* ── Responsive ─────────────────────────── */
+@media(max-width:580px){
+  body{padding:16px}
+  .container{max-width:100%}
+  .page-header h1{font-size:20px}
+  .order-header{flex-direction:column;align-items:flex-start;gap:4px}
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+</style>
+
+</head>
+<body>
+<div class="container">
+<div class="page-header"><div class="icon-circle" style="background:color-mix(in srgb, var(--brand) 12%, transparent)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div><h1>License Activated</h1><p class="subtitle">Your license has been activated on this device.</p></div>
+<div class="alert alert-success">Your license is now active. You can manage activations from your account.</div>
+<div class="section-label">Activation Details</div><div class="kv-list"><div class="kv-row"><span class="kv-label">Product</span><span class="kv-value">Pro Audio Plugin</span></div><div class="kv-row"><span class="kv-label">License Key</span><span class="kv-value">FA15-328F-84FE-1974</span></div><div class="kv-row"><span class="kv-label">Device</span><span class="kv-value">MacBook Pro (M4)</span></div><div class="kv-row"><span class="kv-label">Activated</span><span class="kv-value">March 27, 2026</span></div><div class="kv-row"><span class="kv-label">Activations</span><span class="kv-value">1 of 3</span></div></div>
+<div style="height:8px"></div>
+<div style="text-align:center">
+<a href="#" class="btn btn-outline">Manage Activations</a>
+</div>
+<div class="page-footer"><p>&copy; 2026 ArrayPress</p></div>
+</div>
+
+</body>
+</html>
