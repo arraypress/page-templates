@@ -566,10 +566,44 @@ describe('loginPage', () => {
     assert.ok(html.includes('Send Magic Link'));
   });
 
-  it('includes Turnstile when site key provided', () => {
+  it('includes Turnstile when site key provided (legacy)', () => {
     const html = loginPage({ turnstileSiteKey: 'xxx' });
     assert.ok(html.includes('cf-turnstile'));
     assert.ok(html.includes('challenges.cloudflare.com'));
+  });
+
+  it('includes Turnstile via captcha config', () => {
+    const html = loginPage({ captcha: { provider: 'turnstile', siteKey: 'ts-key-123' } });
+    assert.ok(html.includes('cf-turnstile'));
+    assert.ok(html.includes('ts-key-123'));
+    assert.ok(html.includes('challenges.cloudflare.com'));
+    assert.ok(!html.includes('g-recaptcha'));
+  });
+
+  it('includes reCAPTCHA via captcha config', () => {
+    const html = loginPage({ captcha: { provider: 'recaptcha', siteKey: 'rc-key-456' } });
+    assert.ok(html.includes('g-recaptcha'));
+    assert.ok(html.includes('rc-key-456'));
+    assert.ok(html.includes('google.com/recaptcha'));
+    assert.ok(!html.includes('cf-turnstile'));
+  });
+
+  it('captcha config takes priority over legacy turnstileSiteKey', () => {
+    const html = loginPage({
+      captcha: { provider: 'recaptcha', siteKey: 'rc-key' },
+      turnstileSiteKey: 'ts-key',
+    });
+    assert.ok(html.includes('g-recaptcha'));
+    assert.ok(html.includes('rc-key'));
+    assert.ok(!html.includes('cf-turnstile'));
+  });
+
+  it('no captcha when captcha is null', () => {
+    const html = loginPage({ captcha: null });
+    assert.ok(!html.includes('cf-turnstile'));
+    assert.ok(!html.includes('g-recaptcha'));
+    assert.ok(!html.includes('challenges.cloudflare.com'));
+    assert.ok(!html.includes('google.com/recaptcha'));
   });
 
   it('shows error message', () => {

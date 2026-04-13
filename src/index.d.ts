@@ -164,11 +164,19 @@ export function successPage(options: PageOptions & {
   cta?: { text: string; url: string };
 }): string;
 
+export interface CaptchaConfig {
+  provider: 'turnstile' | 'recaptcha';
+  siteKey: string;
+}
+
 export function loginPage(options: PageOptions & {
   title?: string;
   subtitle?: string;
   actionUrl?: string;
   buttonText?: string;
+  /** CAPTCHA config. Takes priority over turnstileSiteKey. */
+  captcha?: CaptchaConfig | null;
+  /** @deprecated Use `captcha` instead. */
   turnstileSiteKey?: string;
   helpText?: string;
   error?: string;

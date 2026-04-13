@@ -114,7 +114,8 @@ export function successPage({
  * @param {string} [options.subtitle] - Subtitle text.
  * @param {string} [options.actionUrl] - Form action URL.
  * @param {string} [options.buttonText='Send Magic Link'] - Submit button text.
- * @param {string} [options.turnstileSiteKey] - Cloudflare Turnstile site key (enables captcha).
+ * @param {Object} [options.captcha] - CAPTCHA config: { provider: 'turnstile' | 'recaptcha', siteKey: string }.
+ * @param {string} [options.turnstileSiteKey] - DEPRECATED: Use captcha instead. Cloudflare Turnstile site key.
  * @param {string} [options.helpText] - Help text below form.
  * @param {string} [options.error] - Error message to display.
  * @param {PageOptions} options - Page options.
@@ -125,6 +126,7 @@ export function loginPage({
   subtitle = 'Enter your email to access your orders and downloads.',
   actionUrl = '/api/magic-link',
   buttonText = 'Send Magic Link',
+  captcha,
   turnstileSiteKey,
   helpText,
   error,
@@ -132,6 +134,10 @@ export function loginPage({
   brandColor,
   theme,
 } = {}) {
+  // Resolve captcha config — new `captcha` object takes priority, fall back to legacy `turnstileSiteKey`
+  const resolvedCaptcha = captcha
+    || (turnstileSiteKey ? { provider: 'turnstile', siteKey: turnstileSiteKey } : null);
+
   let body = c.header({ icon: 'mail', title, subtitle });
 
   if (error) body += c.alert({ message: error, type: 'error' });
@@ -141,8 +147,10 @@ export function loginPage({
   body += c.input({ name: 'email', type: 'email', placeholder: 'you@example.com', required: true });
   body += c.spacer({ height: 12 });
 
-  if (turnstileSiteKey) {
-    body += `<div class="cf-turnstile" data-sitekey="${turnstileSiteKey}" data-theme="auto" style="margin-bottom:12px"></div>`;
+  if (resolvedCaptcha && resolvedCaptcha.provider === 'turnstile' && resolvedCaptcha.siteKey) {
+    body += `<div class="cf-turnstile" data-sitekey="${resolvedCaptcha.siteKey}" data-theme="auto" style="margin-bottom:12px"></div>`;
+  } else if (resolvedCaptcha && resolvedCaptcha.provider === 'recaptcha' && resolvedCaptcha.siteKey) {
+    body += `<div class="g-recaptcha" data-sitekey="${resolvedCaptcha.siteKey}" style="margin-bottom:12px"></div>`;
   }
 
   body += c.button({ text: buttonText, type: 'submit', fullWidth: true, id: 'login-btn' });
@@ -151,7 +159,12 @@ export function loginPage({
 
   if (helpText) body += `<p style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:16px">${helpText}</p>`;
 
-  const extraHead = turnstileSiteKey ? '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' : '';
+  let extraHead = '';
+  if (resolvedCaptcha && resolvedCaptcha.provider === 'turnstile' && resolvedCaptcha.siteKey) {
+    extraHead = '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
+  } else if (resolvedCaptcha && resolvedCaptcha.provider === 'recaptcha' && resolvedCaptcha.siteKey) {
+    extraHead = '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
+  }
 
   const scripts = `document.getElementById('login-form').addEventListener('submit',function(e){
 var b=document.getElementById('login-btn');b.disabled=true;b.textContent='Sending...';
