@@ -29,6 +29,18 @@ export interface RenderPageOptions {
 export function renderPage(options: RenderPageOptions): string;
 export const CSS: string;
 
+/**
+ * HTML-escape a string (`&`, `<`, `>`, `"`, `'`) — safe for interpolation
+ * into HTML content, double-quoted attributes, and single-quoted
+ * JS string literals inside `onclick`/`onerror` handlers. `null` and
+ * `undefined` become empty strings.
+ *
+ * The library's own components call this internally on every value
+ * they render; this export lets callers escape user-supplied values
+ * when they build their own HTML around the components.
+ */
+export function escapeHtml(input: unknown): string;
+
 // ── Components ──────────────────────────────
 
 export function header(options: {

@@ -16,6 +16,10 @@ export { renderPage } from './render.js';
 // CSS (exported for custom use)
 export { CSS } from './styles.js';
 
+// HTML-escape helper — exposed so callers can escape user input
+// before building their own HTML strings around these components.
+export { escapeHtml } from './components/index.js';
+
 // Components (individual + namespace)
 import * as components from './components/index.js';
 export { components };

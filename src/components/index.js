@@ -9,14 +9,35 @@
 
 // ── Helpers ─────────────────────────────────
 
-function esc(str) {
-  if (str === null || str === undefined) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+const HTML_ESCAPES = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+};
+
+/**
+ * Escape HTML special characters in a string.
+ *
+ * Handles the full set — `& < > " '` — so the returned string is
+ * safe to interpolate into HTML content, double-quoted attributes,
+ * and single-quoted JS string literals within `onclick`/`onerror`
+ * handlers. `null`/`undefined` become empty strings.
+ *
+ * Exported as `escapeHtml` from the package root so library consumers
+ * can escape their own user input before building HTML strings.
+ *
+ * @param {*} input - Any value; coerced to string.
+ * @returns {string} HTML-escaped string.
+ */
+export function escapeHtml(input) {
+  if (input === null || input === undefined) return '';
+  return String(input).replace(/[&<>"']/g, (c) => HTML_ESCAPES[c]);
 }
+
+/** Short alias used internally by every component below. */
+const esc = escapeHtml;
 
 // ── SVG Icons ───────────────────────────────
 

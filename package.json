@@ -1,6 +1,6 @@
 {
   "name": "@arraypress/page-templates",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Server-rendered HTML page templates and components for transactional pages — order success, downloads, customer portal, login. Light and dark themes.",
   "type": "module",
   "main": "src/index.js",
